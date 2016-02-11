@@ -4,68 +4,96 @@ namespace Octopush\Api;
 
 class Client
 {
-	const BASE_URL = 'www.octopush-dm.com';
+    const BASE_URL = 'www.octopush-dm.com';
 
-	const SMS_TYPE_LOWCOST = 'XXX';
-	const SMS_TYPE_PREMIUM = 'FR';
-	const SMS_TYPE_GLOBAL = 'WWW';
+    const SMS_TYPE_LOWCOST = 'XXX';
+    const SMS_TYPE_PREMIUM = 'FR';
+    const SMS_TYPE_GLOBAL = 'WWW';
 
-	const REQUEST_MODE_REAL = 'real';
-	const REQUEST_MODE_SIMU = 'simu';
+    const REQUEST_MODE_REAL = 'real';
+    const REQUEST_MODE_SIMU = 'simu';
 
-	/**
-	 * @var string
-	 */
+    /**
+     * @var string
+     */
     private $userLogin;
 
-	/**
-	 * @var string
-	 */
+    /**
+     * @var string
+     */
     private $apiKey;
 
-	/**
-	 * @var string self::SMS_TYPE_*
-	 */
+    /**
+     * @var string self::SMS_TYPE_*
+     */
     private $smsType = self::SMS_TYPE_GLOBAL;
 
-	/**
-	 * @var array
-	 */
+    /**
+     * @var array
+     */
     private $smsRecipients = [];
 
-	/**
-	 * @var int unix timestamp
-	 */
+    /**
+     * @var int unix timestamp
+     */
     private $sendingTime;
 
-	/**
-	 * @var string
-	 */
+    /**
+     * @var string
+     */
     private $smsSender = 'OneSender';
 
-	/**
-	 * @var string self::REQUEST_MODE_*
-	 */
+    /**
+     * @var string self::REQUEST_MODE_*
+     */
     private $requestMode = self::REQUEST_MODE_REAL;
 
-    private $request_id;   // string
-    private $sms_ticket;   // string
-    private $with_replies; // int
-    private $transactional; // int
-    private $msisdn_sender; // int
-    private $request_keys; // int
+    /**
+     * @var string
+     */
+    private $requestKeys;
 
     public function __construct($userLogin, $apiKey)
     {
         $this->userLogin = $userLogin;
         $this->apiKey = $apiKey;
         $this->sendingTime = time();
+    }
 
-        $this->request_id = '';
-        $this->with_replies = 0;
-        $this->transactional = 0;
-        $this->msisdn_sender = 0;
-        $this->request_keys = '';
+    public function setSmsType($smsType)
+    {
+        $this->smsType = $smsType;
+    }
+
+    public function setSmsRecipients(array $smsRecipients)
+    {
+        $this->smsRecipients = $smsRecipients;
+    }
+
+    public function setSmsSender($smsSender)
+    {
+        $this->smsSender = $smsSender;
+    }
+
+    public function set_date($y, $m, $d, $h, $i)
+    {
+        $sms_y = intval($y);
+        $sms_d = intval($d);
+        $sms_m = intval($m);
+        $sms_h = intval($h);
+        $sms_i = intval($i);
+
+        $this->sendingTime = mktime($sms_h, $sms_i, 0, $sms_m, $sms_d, $sms_y);
+    }
+
+    public function setSimulationMode()
+    {
+        $this->requestMode = self::REQUEST_MODE_SIMU;
+    }
+
+    public function setRequestKeys($requestKeys)
+    {
+        $this->requestKeys = $requestKeys;
     }
 
     public function send($smsText)
@@ -85,8 +113,8 @@ class Client
         }
 
         // If needed, key must be computed
-        if ($this->request_keys !== '') {
-            $data['request_keys'] = $this->request_keys;
+        if (null !== $this->requestKeys) {
+            $data['request_keys'] = $this->requestKeys;
             $data['request_sha1'] = $this->_get_request_sha1_string($data);
         }
 
@@ -105,7 +133,7 @@ class Client
 
     private function _get_request_sha1_string($data)
     {
-        $A_char_to_field = [
+        $charToField = [
             'T' => 'sms_text',
             'R' => 'sms_recipients',
             'Y' => 'sms_type',
@@ -120,18 +148,18 @@ class Client
             'N' => 'transactional',
             'Q' => 'request_id',
         ];
-        $request_string = '';
-        for ($i = 0, $n = strlen($this->request_keys); $i < $n; ++$i) {
-            $char = $this->request_keys[$i];
 
-            if (!isset($A_char_to_field[$char]) || !isset($data[$A_char_to_field[$char]])) {
+        $requestString = '';
+        for ($i = 0, $n = strlen($this->requestKeys); $i < $n; ++$i) {
+            $char = $this->requestKeys[$i];
+
+            if (!isset($charToField[$char]) || !isset($data[$charToField[$char]])) {
                 continue;
             }
-            $request_string .= $data[$A_char_to_field[$char]];
+            $requestString .= $data[$charToField[$char]];
         }
-        $request_sha1 = sha1($request_string);
 
-        return $request_sha1;
+        return sha1($requestString);
     }
 
     private function _httpRequest($path, array $fields)
@@ -191,87 +219,5 @@ class Client
         } else {
             die('Server does not support HTTP(S) requests.');
         }
-    }
-
-    public function setSmsType($smsType)
-    {
-        $this->smsType = $smsType;
-    }
-
-    public function setSmsRecipients(array $smsRecipients)
-    {
-        $this->smsRecipients = $smsRecipients;
-    }
-
-    public function setSmsSender($smsSender)
-    {
-        $this->smsSender = $smsSender;
-    }
-
-    public function set_date($y, $m, $d, $h, $i)
-    {
-        $sms_y = intval($y);
-        $sms_d = intval($d);
-        $sms_m = intval($m);
-        $sms_h = intval($h);
-        $sms_i = intval($i);
-
-        $this->sendingTime = mktime($sms_h, $sms_i, 0, $sms_m, $sms_d, $sms_y);
-    }
-
-    public function setSimulationMode()
-    {
-        $this->requestMode = self::REQUEST_MODE_SIMU;
-    }
-
-    public function set_sms_ticket($sms_ticket)
-    {
-        $this->sms_ticket = $sms_ticket;
-    }
-
-    public function set_sms_request_id($request_id)
-    {
-        $this->request_id = preg_replace('`[^0-9a-zA-Z]*`', '', $request_id);
-    }
-
-    /*
-     * Notifies Octopush plateform that you want to recieve the SMS that your recipients will send back to your sending(s)
-     */
-
-    public function set_option_with_replies($with_replies)
-    {
-        if (!isset($with_replies) || intval($with_replies) !== 1) {
-            $this->with_replies = 0;
-        } else {
-            $this->with_replies = 1;
-        }
-    }
-
-    /*
-     * Notifies Octopush that you are making a transactional sending.
-     * With this option, sending marketing SMS is strongly forbidden, and may make your account blocked in case of abuses.
-     * DO NOT USE this option if you are not sure to understand what a transactional SMS is.
-     */
-
-    public function set_option_transactional($transactional)
-    {
-        if (!isset($transactional) || intval($transactional) !== 1) {
-            $this->transactional = 0;
-        } else {
-            $this->transactional = 1;
-        }
-    }
-
-    /*
-     * Use a MSISDN number.
-     */
-    public function set_sender_is_msisdn($msisdn_sender)
-    {
-        $this->msisdn_sender = $msisdn_sender;
-    }
-
-    public function set_request_keys($request_keys)
-    {
-        $this->request_keys = $request_keys;
     }
 }
