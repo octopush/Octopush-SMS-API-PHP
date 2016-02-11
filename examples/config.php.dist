@@ -1,12 +1,5 @@
 <?php
 
-define('PATH', '');
-define('PATH_BIS', '');
-$path = PATH;
-
-define('PATH_SMS', $path . '/api/sms');
-define('PATH_CREDIT', $path . '/api/credit');
-
 define('_CUT_', 8);
 
 define('SMS_WORLD', 'WWW');

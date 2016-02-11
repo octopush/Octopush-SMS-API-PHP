@@ -54,8 +54,6 @@ class Client
 
     public function send()
     {
-        $path = PATH_SMS;
-
         $data = [
             'user_login' => $this->user_login,
             'api_key' => $this->api_key,
@@ -75,19 +73,17 @@ class Client
             $data['request_sha1'] = $this->_get_request_sha1_string($data);
         }
 
-        return trim($this->_httpRequest($path, $data));
+        return trim($this->_httpRequest('/api/sms', $data));
     }
 
     public function getCredit()
     {
-        $path = PATH_CREDIT;
-
         $data = [
             'user_login' => $this->user_login,
             'api_key' => $this->api_key,
         ];
 
-        return trim($this->_httpRequest($path, $data));
+        return trim($this->_httpRequest('/api/credit', $data));
     }
 
     private function _get_request_sha1_string($data)
