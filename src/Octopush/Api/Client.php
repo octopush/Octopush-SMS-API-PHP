@@ -10,6 +10,9 @@ class Client
 	const SMS_TYPE_PREMIUM = 'FR';
 	const SMS_TYPE_GLOBAL = 'WWW';
 
+	const REQUEST_MODE_REAL = 'real';
+	const REQUEST_MODE_SIMU = 'simu';
+
 	/**
 	 * @var string
 	 */
@@ -20,16 +23,31 @@ class Client
 	 */
     private $apiKey;
 
-    private $sms_recipients;  // array
-    private $recipients_first_names;  // array
-    private $recipients_last_names;  // array
-    private $sms_fields_1;  // array
-    private $sms_fields_2;  // array
-    private $sms_fields_3;  // array
-    private $sms_type;  // int (standard or pro)
-    private $sending_time;  // int
-    private $sms_sender;   // string
-    private $request_mode;   // string
+	/**
+	 * @var string self::SMS_TYPE_*
+	 */
+    private $smsType = self::SMS_TYPE_GLOBAL;
+
+	/**
+	 * @var array
+	 */
+    private $smsRecipients = [];
+
+	/**
+	 * @var int unix timestamp
+	 */
+    private $sendingTime;
+
+	/**
+	 * @var string
+	 */
+    private $smsSender = 'OneSender';
+
+	/**
+	 * @var string self::REQUEST_MODE_*
+	 */
+    private $requestMode = self::REQUEST_MODE_REAL;
+
     private $request_id;   // string
     private $sms_ticket;   // string
     private $with_replies; // int
@@ -41,18 +59,7 @@ class Client
     {
         $this->userLogin = $userLogin;
         $this->apiKey = $apiKey;
-
-        $this->sms_recipients = [];
-        $this->recipients_first_names = [];
-        $this->recipients_last_names = [];
-        $this->sms_fields_1 = [];
-        $this->sms_fields_2 = [];
-        $this->sms_fields_3 = [];
-
-        $this->sending_time = time();
-
-        $this->sms_sender = 'OneSender';
-        $this->sms_type = self::SMS_TYPE_GLOBAL;
+        $this->sendingTime = time();
 
         $this->request_id = '';
         $this->with_replies = 0;
@@ -67,13 +74,14 @@ class Client
             'user_login' => $this->userLogin,
             'api_key' => $this->apiKey,
             'sms_text' => $smsText,
-            'sms_recipients' => implode(',', $this->sms_recipients),
-            'sms_type' => $this->sms_type,
-            'sms_sender' => $this->sms_sender,
+            'sms_recipients' => implode(',', $this->smsRecipients),
+            'sms_type' => $this->smsType,
+            'sms_sender' => $this->smsSender,
+            'request_mode' => $this->requestMode,
         ];
-        if ($this->sending_time > time()) {
+        if ($this->sendingTime > time()) {
             // GMT + 1 (Europe/Paris)
-            $data['sending_time'] = $this->sending_time;
+            $data['sending_time'] = $this->sendingTime;
         }
 
         // If needed, key must be computed
@@ -185,44 +193,19 @@ class Client
         }
     }
 
-    public function set_sms_type($sms_type)
+    public function setSmsType($smsType)
     {
-        $this->sms_type = $sms_type;
+        $this->smsType = $smsType;
     }
 
-    public function set_sms_recipients($sms_recipients)
+    public function setSmsRecipients(array $smsRecipients)
     {
-        $this->sms_recipients = $sms_recipients;
+        $this->smsRecipients = $smsRecipients;
     }
 
-    public function set_recipients_first_names($first_names)
+    public function setSmsSender($smsSender)
     {
-        $this->recipients_first_names = $first_names;
-    }
-
-    public function set_recipients_last_names($last_names)
-    {
-        $this->recipients_last_names = $last_names;
-    }
-
-    public function set_sms_fields_1($sms_fields_1)
-    {
-        $this->sms_fields_1 = $sms_fields_1;
-    }
-
-    public function set_sms_fields_2($sms_fields_2)
-    {
-        $this->sms_fields_2 = $sms_fields_2;
-    }
-
-    public function set_sms_fields_3($sms_fields_3)
-    {
-        $this->sms_fields_3 = $sms_fields_3;
-    }
-
-    public function set_sms_sender($sms_sender)
-    {
-        $this->sms_sender = $sms_sender;
+        $this->smsSender = $smsSender;
     }
 
     public function set_date($y, $m, $d, $h, $i)
@@ -233,12 +216,12 @@ class Client
         $sms_h = intval($h);
         $sms_i = intval($i);
 
-        $this->sending_time = mktime($sms_h, $sms_i, 0, $sms_m, $sms_d, $sms_y);
+        $this->sendingTime = mktime($sms_h, $sms_i, 0, $sms_m, $sms_d, $sms_y);
     }
 
-    public function set_simulation_mode()
+    public function setSimulationMode()
     {
-        $this->request_mode = SIMULATION;
+        $this->requestMode = self::REQUEST_MODE_SIMU;
     }
 
     public function set_sms_ticket($sms_ticket)

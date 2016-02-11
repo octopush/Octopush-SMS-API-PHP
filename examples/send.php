@@ -6,7 +6,8 @@ $config = require __DIR__.'/config.php';
 
 $client = new Octopush\Api\Client($config['email'], $config['api_key']);
 
-$client->set_sms_recipients($config['recipients']);
-$client->set_sms_sender('Octopush');
+$client->setSmsRecipients($config['recipients']);
+$client->setSmsSender('Octopush');
+$client->setSimulationMode();
 
 echo $client->send('Octopush - Send SMS like a PRO.');
