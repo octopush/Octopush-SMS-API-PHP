@@ -13,5 +13,8 @@
         "psr-0": {
             "Octopush\\Api\\": "src/"
         }
-    }
+    },
+    "require": {
+        "php": ">=5.4"
+    },
 }

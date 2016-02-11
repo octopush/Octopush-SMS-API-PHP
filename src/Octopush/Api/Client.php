@@ -4,25 +4,25 @@ namespace Octopush\Api;
 
 class Client
 {
-    public $user_login; // string
-    public $api_key;   // string
-    public $sms_text; // string
-    public $sms_recipients;  // array
-    public $recipients_first_names;  // array
-    public $recipients_last_names;  // array
-    public $sms_fields_1;  // array
-    public $sms_fields_2;  // array
-    public $sms_fields_3;  // array
-    public $sms_type;  // int (standard or pro)
-    public $sending_time;  // int
-    public $sms_sender;   // string
-    public $request_mode;   // string
-    public $request_id;   // string
-    public $sms_ticket;   // string
-    public $with_replies; // int
-    public $transactional; // int
-    public $msisdn_sender; // int
-    public $request_keys; // int
+    private $user_login; // string
+    private $api_key;   // string
+    private $sms_text; // string
+    private $sms_recipients;  // array
+    private $recipients_first_names;  // array
+    private $recipients_last_names;  // array
+    private $sms_fields_1;  // array
+    private $sms_fields_2;  // array
+    private $sms_fields_3;  // array
+    private $sms_type;  // int (standard or pro)
+    private $sending_time;  // int
+    private $sms_sender;   // string
+    private $request_mode;   // string
+    private $request_id;   // string
+    private $sms_ticket;   // string
+    private $with_replies; // int
+    private $transactional; // int
+    private $msisdn_sender; // int
+    private $request_keys; // int
 
     public function __construct()
     {
@@ -31,12 +31,12 @@ class Client
 
         $this->sms_text = '';
 
-        $this->sms_recipients = array();
-        $this->recipients_first_names = array();
-        $this->recipients_last_names = array();
-        $this->sms_fields_1 = array();
-        $this->sms_fields_2 = array();
-        $this->sms_fields_3 = array();
+        $this->sms_recipients = [];
+        $this->recipients_first_names = [];
+        $this->recipients_last_names = [];
+        $this->sms_fields_1 = [];
+        $this->sms_fields_2 = [];
+        $this->sms_fields_3 = [];
 
         $this->sending_time = time();
 
@@ -56,24 +56,14 @@ class Client
         $path = PATH_SMS;
         $port = PORT;
 
-        $data = array(
+        $data = [
             'user_login' => $this->user_login,
             'api_key' => $this->api_key,
             'sms_text' => $this->sms_text,
             'sms_recipients' => implode(',', $this->sms_recipients),
-            // 'recipients_first_names'	 => implode(',', $this->recipients_first_names),
-            // 'recipients_last_names'	 => implode(',', $this->recipients_last_names),
-            // 'sms_fields_1'			 => implode(',', $this->sms_fields_1),
-            // 'sms_fields_2'			 => implode(',', $this->sms_fields_2),
-            // 'sms_fields_3'			 => implode(',', $this->sms_fields_3),
             'sms_type' => $this->sms_type,
             'sms_sender' => $this->sms_sender,
-            // 'request_id'			 => $this->request_id,
-            // 'request_mode'			 => $this->request_mode,
-            // 'with_replies'			 => $this->with_replies,
-            // 'transactional'			 => $this->transactional,
-            // 'msisdn_sender'			 => $this->msisdn_sender
-        );
+        ];
         if ($this->sending_time > time()) {
             // GMT + 1 (Europe/Paris)
             $data['sending_time'] = $this->sending_time;
@@ -94,17 +84,17 @@ class Client
         $path = PATH_CREDIT;
         $port = PORT;
 
-        $data = array(
+        $data = [
             'user_login' => $this->user_login,
             'api_key' => $this->api_key,
-        );
+        ];
 
         return trim($this->_httpRequest($domain, $path, $port, $data));
     }
 
     private function _get_request_sha1_string($data)
     {
-        $A_char_to_field = array(
+        $A_char_to_field = [
             'T' => 'sms_text',
             'R' => 'sms_recipients',
             'Y' => 'sms_type',
@@ -118,7 +108,7 @@ class Client
             'W' => 'with_replies',
             'N' => 'transactional',
             'Q' => 'request_id',
-        );
+        ];
         $request_string = '';
         for ($i = 0, $n = strlen($this->request_keys); $i < $n; ++$i) {
             $char = $this->request_keys[$i];
@@ -133,10 +123,10 @@ class Client
         return $request_sha1;
     }
 
-    private function _httpRequest($domain, $path, $port, $A_fields = array())
+    private function _httpRequest($domain, $path, $port, $A_fields = [])
     {
         set_time_limit(0);
-        $qs = array();
+        $qs = [];
         foreach ($A_fields as $k => $v) {
             $qs[] = $k.'='.urlencode($v);
         }
@@ -190,8 +180,6 @@ class Client
         } else {
             die('Server does not support HTTP(S) requests.');
         }
-
-        return;
     }
 
     public function set_user_login($user_login)
