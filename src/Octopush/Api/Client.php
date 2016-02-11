@@ -20,7 +20,6 @@ class Client
 	 */
     private $apiKey;
 
-    private $sms_text; // string
     private $sms_recipients;  // array
     private $recipients_first_names;  // array
     private $recipients_last_names;  // array
@@ -43,8 +42,6 @@ class Client
         $this->userLogin = $userLogin;
         $this->apiKey = $apiKey;
 
-        $this->sms_text = '';
-
         $this->sms_recipients = [];
         $this->recipients_first_names = [];
         $this->recipients_last_names = [];
@@ -64,12 +61,12 @@ class Client
         $this->request_keys = '';
     }
 
-    public function send()
+    public function send($smsText)
     {
         $data = [
             'user_login' => $this->userLogin,
             'api_key' => $this->apiKey,
-            'sms_text' => $this->sms_text,
+            'sms_text' => $smsText,
             'sms_recipients' => implode(',', $this->sms_recipients),
             'sms_type' => $this->sms_type,
             'sms_sender' => $this->sms_sender,
@@ -186,11 +183,6 @@ class Client
         } else {
             die('Server does not support HTTP(S) requests.');
         }
-    }
-
-    public function set_sms_text($sms_text)
-    {
-        $this->sms_text = $sms_text;
     }
 
     public function set_sms_type($sms_type)
