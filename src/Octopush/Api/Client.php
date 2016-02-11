@@ -6,6 +6,10 @@ class Client
 {
 	const BASE_URL = 'www.octopush-dm.com';
 
+	const SMS_TYPE_LOWCOST = 'XXX';
+	const SMS_TYPE_PREMIUM = 'FR';
+	const SMS_TYPE_GLOBAL = 'WWW';
+
     private $user_login; // string
     private $api_key;   // string
     private $sms_text; // string
@@ -43,7 +47,7 @@ class Client
         $this->sending_time = time();
 
         $this->sms_sender = 'OneSender';
-        $this->sms_type = SMS_WORLD;
+        $this->sms_type = self::SMS_TYPE_GLOBAL;
 
         $this->request_id = '';
         $this->with_replies = 0;

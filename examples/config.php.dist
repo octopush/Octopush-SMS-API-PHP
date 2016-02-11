@@ -1,9 +1,5 @@
 <?php
 
-define('SMS_WORLD', 'WWW');
-define('SMS_LOWCOST_FRANCE', 'XXX');
-define('SMS_PREMIUM_FRANCE', 'FR');
-
 return [
     'email' => '**********@*******',
     'api_key' => '****************',
