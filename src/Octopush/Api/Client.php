@@ -4,6 +4,8 @@ namespace Octopush\Api;
 
 class Client
 {
+	const BASE_URL = 'www.octopush-dm.com';
+
     private $user_login; // string
     private $api_key;   // string
     private $sms_text; // string
@@ -52,7 +54,6 @@ class Client
 
     public function send()
     {
-        $domain = DOMAIN;
         $path = PATH_SMS;
         $port = PORT;
 
@@ -75,12 +76,11 @@ class Client
             $data['request_sha1'] = $this->_get_request_sha1_string($data);
         }
 
-        return trim($this->_httpRequest($domain, $path, $port, $data));
+        return trim($this->_httpRequest($path, $port, $data));
     }
 
     public function getCredit()
     {
-        $domain = DOMAIN;
         $path = PATH_CREDIT;
         $port = PORT;
 
@@ -89,7 +89,7 @@ class Client
             'api_key' => $this->api_key,
         ];
 
-        return trim($this->_httpRequest($domain, $path, $port, $data));
+        return trim($this->_httpRequest($path, $port, $data));
     }
 
     private function _get_request_sha1_string($data)
@@ -123,7 +123,7 @@ class Client
         return $request_sha1;
     }
 
-    private function _httpRequest($domain, $path, $port, $A_fields = [])
+    private function _httpRequest($path, $port, $A_fields = [])
     {
         set_time_limit(0);
         $qs = [];
@@ -133,7 +133,7 @@ class Client
 
         $request = implode('&', $qs);
 
-        if (function_exists('curl_init') and $ch = curl_init(substr($domain, _CUT_).$path)) {
+        if (function_exists('curl_init') and $ch = curl_init(self::BASE_URL.$path)) {
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_PORT, $port);
 
@@ -147,7 +147,7 @@ class Client
             return $result;
         } elseif (ini_get('allow_url_fopen')) {
             $errno = $errstr = null;
-            $fp = fsockopen(substr($domain, _CUT_), $port, $errno, $errstr, 100);
+            $fp = fsockopen(self::BASE_URL, $port, $errno, $errstr, 100);
             if ($errno != '' || $errstr != '') {
                 echo 'errno : '.$errno;
                 echo "\n";
@@ -159,7 +159,7 @@ class Client
                 return;
             }
             $header = 'POST '.$path." HTTP/1.1\r\n";
-            $header .= 'Host: '.substr($domain, _CUT_)."\r\n";
+            $header .= 'Host: '.self::BASE_URL."\r\n";
             $header .= "Accept: text\r\n";
             $header .= "User-Agent: Octopush\r\n";
             $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
