@@ -55,7 +55,6 @@ class Client
     public function send()
     {
         $path = PATH_SMS;
-        $port = PORT;
 
         $data = [
             'user_login' => $this->user_login,
@@ -76,20 +75,19 @@ class Client
             $data['request_sha1'] = $this->_get_request_sha1_string($data);
         }
 
-        return trim($this->_httpRequest($path, $port, $data));
+        return trim($this->_httpRequest($path, $data));
     }
 
     public function getCredit()
     {
         $path = PATH_CREDIT;
-        $port = PORT;
 
         $data = [
             'user_login' => $this->user_login,
             'api_key' => $this->api_key,
         ];
 
-        return trim($this->_httpRequest($path, $port, $data));
+        return trim($this->_httpRequest($path, $data));
     }
 
     private function _get_request_sha1_string($data)
@@ -123,7 +121,7 @@ class Client
         return $request_sha1;
     }
 
-    private function _httpRequest($path, $port, $A_fields = [])
+    private function _httpRequest($path, $A_fields = [])
     {
         set_time_limit(0);
         $qs = [];
@@ -135,7 +133,7 @@ class Client
 
         if (function_exists('curl_init') and $ch = curl_init(self::BASE_URL.$path)) {
             curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_PORT, $port);
+            curl_setopt($ch, CURLOPT_PORT, 80);
 
             curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -147,7 +145,7 @@ class Client
             return $result;
         } elseif (ini_get('allow_url_fopen')) {
             $errno = $errstr = null;
-            $fp = fsockopen(self::BASE_URL, $port, $errno, $errstr, 100);
+            $fp = fsockopen(self::BASE_URL, 80, $errno, $errstr, 100);
             if ($errno != '' || $errstr != '') {
                 echo 'errno : '.$errno;
                 echo "\n";
