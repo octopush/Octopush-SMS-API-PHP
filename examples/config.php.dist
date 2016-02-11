@@ -1,0 +1,21 @@
+<?php
+
+define('DOMAIN', 'https://www.octopush-dm.com');
+define('PORT', '80');
+define('PATH', '');
+define('PATH_BIS', '');
+$path = PATH;
+
+define('PATH_SMS', $path . '/api/sms');
+define('PATH_CREDIT', $path . '/api/credit');
+
+define('_CUT_', 8);
+
+define('SMS_WORLD', 'WWW');
+define('SMS_LOWCOST_FRANCE', 'XXX');
+define('SMS_PREMIUM_FRANCE', 'FR');
+
+return [
+    'email' => '**********@*******',
+    'api_key' => '****************',
+];

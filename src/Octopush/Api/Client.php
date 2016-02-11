@@ -1,23 +1,9 @@
 <?php
 
-/**
- * SMS Sending Library by POST HTTP
- *
- * Author Yoni Guimberteau yoni@octopush.com
- *
- * copyright (c) 2014 Yoni Guimberteau
- * licence : use, edit, sell.
- * L'auteur ainsi se decharge de toute responsabilite
- * concernant une quelconque utilisation de ce code, livre sans aucune garantie.
- * Il n'est distribue qu'a titre d'exemple de fonctionnement du module POST HTTP de OCTOPUSH,
- * Vous pourrez toutefois telecharger une version actualisee sur www.octopush.com
- */
+namespace Octopush\Api;
 
-include ('config.inc.php');
-
-class SMS
+class Client
 {
-
 	public $user_login; // string
 	public $api_key;   // string
 	public $sms_text; // string
@@ -105,10 +91,10 @@ class SMS
 		return trim($this->_httpRequest($domain, $path, $port, $data));
 	}
 
-	public function getBalance()
+	public function getCredit()
 	{
 		$domain	 = DOMAIN;
-		$path	 = PATH_BALANCE;
+		$path	 = PATH_CREDIT;
 		$port	 = PORT;
 
 		$data = array(

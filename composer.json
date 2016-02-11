@@ -1,0 +1,17 @@
+{
+    "name": "octopush/sms-api",
+    "description": "Octopush - Send SMS like a PRO",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Saša Stamenković",
+            "email": "umpirsky@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Octopush\\Api\\": "src/"
+        }
+    }
+}
