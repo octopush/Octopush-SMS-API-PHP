@@ -10,8 +10,16 @@ class Client
 	const SMS_TYPE_PREMIUM = 'FR';
 	const SMS_TYPE_GLOBAL = 'WWW';
 
-    private $user_login; // string
-    private $api_key;   // string
+	/**
+	 * @var string
+	 */
+    private $userLogin;
+
+	/**
+	 * @var string
+	 */
+    private $apiKey;
+
     private $sms_text; // string
     private $sms_recipients;  // array
     private $recipients_first_names;  // array
@@ -30,10 +38,10 @@ class Client
     private $msisdn_sender; // int
     private $request_keys; // int
 
-    public function __construct()
+    public function __construct($userLogin, $apiKey)
     {
-        $this->user_login = '';
-        $this->api_key = '';
+        $this->userLogin = $userLogin;
+        $this->apiKey = $apiKey;
 
         $this->sms_text = '';
 
@@ -59,8 +67,8 @@ class Client
     public function send()
     {
         $data = [
-            'user_login' => $this->user_login,
-            'api_key' => $this->api_key,
+            'user_login' => $this->userLogin,
+            'api_key' => $this->apiKey,
             'sms_text' => $this->sms_text,
             'sms_recipients' => implode(',', $this->sms_recipients),
             'sms_type' => $this->sms_type,
@@ -83,8 +91,8 @@ class Client
     public function getCredit()
     {
         $data = [
-            'user_login' => $this->user_login,
-            'api_key' => $this->api_key,
+            'user_login' => $this->userLogin,
+            'api_key' => $this->apiKey,
         ];
 
         return trim($this->_httpRequest('/api/credit', $data));
@@ -121,11 +129,11 @@ class Client
         return $request_sha1;
     }
 
-    private function _httpRequest($path, $A_fields = [])
+    private function _httpRequest($path, array $fields)
     {
         set_time_limit(0);
         $qs = [];
-        foreach ($A_fields as $k => $v) {
+        foreach ($fields as $k => $v) {
             $qs[] = $k.'='.urlencode($v);
         }
 
@@ -178,16 +186,6 @@ class Client
         } else {
             die('Server does not support HTTP(S) requests.');
         }
-    }
-
-    public function set_user_login($user_login)
-    {
-        $this->user_login = $user_login;
-    }
-
-    public function set_api_key($api_key)
-    {
-        $this->api_key = $api_key;
     }
 
     public function set_sms_text($sms_text)
