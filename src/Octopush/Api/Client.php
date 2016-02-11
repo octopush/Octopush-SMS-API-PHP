@@ -38,7 +38,6 @@ class Client
         $this->sms_fields_2 = array();
         $this->sms_fields_3 = array();
 
-        $this->sms_mode = INSTANTANE;
         $this->sending_time = time();
 
         $this->sms_sender = 'OneSender';
@@ -243,11 +242,6 @@ class Client
     public function set_sms_fields_3($sms_fields_3)
     {
         $this->sms_fields_3 = $sms_fields_3;
-    }
-
-    public function set_sms_mode($sms_mode)
-    {
-        $this->sms_mode = $sms_mode;
     }
 
     public function set_sms_sender($sms_sender)
