@@ -10,4 +10,6 @@ $client->setSmsRecipients($config['recipients']);
 $client->setSmsSender('Octopush');
 $client->setSimulationMode();
 
-echo $client->send('Octopush - Send SMS like a PRO.');
+$response = $client->send('Octopush - Send SMS like a PRO.');
+
+var_dump($response);

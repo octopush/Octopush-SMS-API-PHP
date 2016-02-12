@@ -6,4 +6,6 @@ $config = require __DIR__.'/config.php';
 
 $client = new Octopush\Api\Client($config['email'], $config['api_key']);
 
-echo $client->getCredit();
+$response = $client->getCredit();
+
+var_dump($response);

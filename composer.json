@@ -16,6 +16,7 @@
     },
     "require": {
         "php": ">=5.4",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "ext-libxml": "*"
     }
 }

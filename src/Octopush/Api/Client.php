@@ -187,7 +187,7 @@ class Client
             curl_close($ch);
 
             throw new ResponseException(sprintf(
-                'Failed to get response from "%s". Result: %s.',
+                'Failed to get response from "%s". Response: %s.',
                 $path,
                 $result
             ));
@@ -195,7 +195,7 @@ class Client
 
         if (200 !== $code = curl_getinfo($ch, CURLINFO_HTTP_CODE)) {
             throw new ResponseException(sprintf(
-                'Server returned "%s" status code. Result: %s.',
+                'Server returned "%s" status code. Response: %s.',
                 $code,
                 $result
             ));
@@ -203,6 +203,19 @@ class Client
 
         curl_close($ch);
 
-        return $result;
+        return $this->xml2array($result);
+    }
+
+    private function xml2array($xml)
+    {
+        $simpleXMLElement = simplexml_load_string($xml, 'SimpleXMLElement');
+        if (false === $simpleXMLElement) {
+            throw new ResponseException(sprintf(
+                'Failed to parse response. Response: %s.',
+                $xml
+            ));
+        }
+
+        return json_decode(json_encode($simpleXMLElement), true);
     }
 }
