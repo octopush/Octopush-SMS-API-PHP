@@ -73,20 +73,14 @@ class Client
         $this->smsRecipients = $smsRecipients;
     }
 
+    public function setSendingTime($sendingTime)
+    {
+        $this->sendingTime = $sendingTime;
+    }
+
     public function setSmsSender($smsSender)
     {
         $this->smsSender = $smsSender;
-    }
-
-    public function set_date($y, $m, $d, $h, $i)
-    {
-        $sms_y = intval($y);
-        $sms_d = intval($d);
-        $sms_m = intval($m);
-        $sms_h = intval($h);
-        $sms_i = intval($i);
-
-        $this->sendingTime = mktime($sms_h, $sms_i, 0, $sms_m, $sms_d, $sms_y);
     }
 
     public function setSimulationMode()
