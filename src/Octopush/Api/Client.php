@@ -2,6 +2,9 @@
 
 namespace Octopush\Api;
 
+/**
+ * Octopush API client.
+ */
 class Client
 {
     const BASE_URL = 'www.octopush-dm.com';
