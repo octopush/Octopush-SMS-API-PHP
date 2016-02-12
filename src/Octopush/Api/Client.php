@@ -2,6 +2,9 @@
 
 namespace Octopush\Api;
 
+use Octopush\Api\Exception\RequestException;
+use Octopush\Api\Exception\ResponseException;
+
 /**
  * Octopush API client.
  */
@@ -162,6 +165,7 @@ class Client
     private function httpRequest($path, array $fields)
     {
         set_time_limit(0);
+
         $qs = [];
         foreach ($fields as $k => $v) {
             $qs[] = $k.'='.urlencode($v);
@@ -169,18 +173,36 @@ class Client
 
         $request = implode('&', $qs);
 
-        if ($ch = curl_init(self::BASE_URL.$path)) {
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_PORT, 80);
+        if (false === $ch = curl_init(self::BASE_URL.$path)) {
+            throw new RequestException(sprintf('Request initialization to "%s" failed.', $path));
+        }
 
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_PORT, 80);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
-            $result = curl_exec($ch);
+        if (false === $result = curl_exec($ch)) {
             curl_close($ch);
 
-            return $result;
+            throw new ResponseException(sprintf(
+                'Failed to get response from "%s". Result: %s.',
+                $path,
+                $result
+            ));
         }
+
+        if (200 !== $code = curl_getinfo($ch, CURLINFO_HTTP_CODE)) {
+            throw new ResponseException(sprintf(
+                'Server returned "%s" status code. Result: %s.',
+                $code,
+                $result
+            ));
+        }
+
+        curl_close($ch);
+
+        return $result;
     }
 }
