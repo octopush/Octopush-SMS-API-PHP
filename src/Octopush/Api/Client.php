@@ -169,7 +169,7 @@ class Client
 
         $request = implode('&', $qs);
 
-        if (function_exists('curl_init') and $ch = curl_init(self::BASE_URL.$path)) {
+        if ($ch = curl_init(self::BASE_URL.$path)) {
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_PORT, 80);
 
@@ -181,40 +181,6 @@ class Client
             curl_close($ch);
 
             return $result;
-        } elseif (ini_get('allow_url_fopen')) {
-            $errno = $errstr = null;
-            $fp = fsockopen(self::BASE_URL, 80, $errno, $errstr, 100);
-            if ($errno != '' || $errstr != '') {
-                echo 'errno : '.$errno;
-                echo "\n";
-                echo 'errstr : '.$errstr;
-            }
-            if (!$fp) {
-                echo 'Unable to connect to host. Try again later.';
-
-                return;
-            }
-            $header = 'POST '.$path." HTTP/1.1\r\n";
-            $header .= 'Host: '.self::BASE_URL."\r\n";
-            $header .= "Accept: text\r\n";
-            $header .= "User-Agent: Octopush\r\n";
-            $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
-            $header .= 'Content-Length: '.strlen($request)."\r\n";
-            $header .= "Connection: close\r\n\r\n";
-            $header .= "{$request}\r\n\r\n";
-
-            fputs($fp, $header);
-            $result = '';
-            while (!feof($fp)) {
-                $result .= fgets($fp, 1024);
-            }
-            fclose($fp);
-
-            $clear_result = substr($result, strpos($result, "\r\n\r\n") + 4);
-
-            return $clear_result;
-        } else {
-            die('Server does not support HTTP(S) requests.');
         }
     }
 }
