@@ -112,10 +112,10 @@ class Client
         // If needed, key must be computed
         if (null !== $this->requestKeys) {
             $data['request_keys'] = $this->requestKeys;
-            $data['request_sha1'] = $this->_get_request_sha1_string($data);
+            $data['request_sha1'] = $this->getRequestSha1String($data);
         }
 
-        return trim($this->_httpRequest('/api/sms', $data));
+        return $this->httpRequest('/api/sms', $data);
     }
 
     public function getCredit()
@@ -125,10 +125,10 @@ class Client
             'api_key' => $this->apiKey,
         ];
 
-        return trim($this->_httpRequest('/api/credit', $data));
+        return $this->httpRequest('/api/credit', $data);
     }
 
-    private function _get_request_sha1_string($data)
+    private function getRequestSha1String(array $data)
     {
         $charToField = [
             'T' => 'sms_text',
@@ -159,7 +159,7 @@ class Client
         return sha1($requestString);
     }
 
-    private function _httpRequest($path, array $fields)
+    private function httpRequest($path, array $fields)
     {
         set_time_limit(0);
         $qs = [];
