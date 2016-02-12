@@ -21,11 +21,15 @@ class Client
     const REQUEST_MODE_SIMU = 'simu';
 
     /**
+     * User login (email address).
+     *
      * @var string
      */
     private $userLogin;
 
     /**
+     * API key available on your manager.
+     *
      * @var string
      */
     private $apiKey;
@@ -36,6 +40,8 @@ class Client
     private $smsType = self::SMS_TYPE_GLOBAL;
 
     /**
+     * Numbers in international format + XXZZZZZ.
+     *
      * @var array
      */
     private $smsRecipients = [];
@@ -46,16 +52,26 @@ class Client
     private $sendingTime;
 
     /**
+     * Sender of the message (if the user allows it), 3-11 alphanumeric characters (a-zA-Z).
+     *
      * @var string
      */
     private $smsSender = 'OneSender';
 
     /**
+     * Allows you to choose simulation mode.
+     *
      * @var string self::REQUEST_MODE_*
      */
     private $requestMode = self::REQUEST_MODE_REAL;
 
     /**
+     * Lists the key fields of the application you want to add in the sha1 hash.
+     *
+     * Example: 'TRYS' (for fields sms_text, sms_recipients, sms_type, sms_sender).
+     *
+     * @see SHA1 Request Codes on http://www.octopush.com/en/api-sms-doc/parameters
+     *
      * @var string
      */
     private $requestKeys;
@@ -97,6 +113,15 @@ class Client
         $this->requestKeys = $requestKeys;
     }
 
+    /**
+     * Sends a simple SMS.
+     *
+     * @param string $smsText Message text (maximum 459 characters).
+     *
+     * @return array
+     *
+     * @see http://www.octopush.com/en/api-sms-doc/sms-sendings
+     */
     public function send($smsText)
     {
         $data = [
@@ -122,6 +147,13 @@ class Client
         return $this->httpRequest('/api/sms', $data);
     }
 
+    /**
+     * Returns credit balance as a number of Euros left on account.
+     *
+     * @return array
+     *
+     * @see http://www.octopush.com/en/api-sms-doc/get-credit
+     */
     public function getCredit()
     {
         $data = [
