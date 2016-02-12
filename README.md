@@ -19,7 +19,7 @@ $ composer require octopush/sms-api
 
 $client = new Octopush\Api\Client('*****@example.com', '***API_KEY***');
 
-$client->setSmsRecipients(['+381********']);
+$client->setSmsRecipients(['+336********']);
 $client->setSmsSender('Octopush');
 
 $client->send('Octopush - Send SMS like a PRO.');
@@ -35,7 +35,7 @@ array:9 [
   "currency_code" => "€"
   "successs" => array:1 [
     "success" => array:4 [
-      "recipient" => "+381*******"
+      "recipient" => "+336*******"
       "country_code" => "FR"
       "cost" => "0.049"
       "sms_needed" => "1"
