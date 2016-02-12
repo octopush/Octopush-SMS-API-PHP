@@ -8,7 +8,8 @@ $client = new Octopush\Api\Client($config['email'], $config['api_key']);
 
 $client->setSmsRecipients($config['recipients']);
 $client->setSmsSender('Octopush');
-$client->setSendingTime(new \DateTime('+1 minute'));
+$client->setSmsMode($client::SMS_MODE_DELAYED);
+$client->setSendingTime(new \DateTime('+6 hours'));
 $client->setSimulationMode();
 
 $response = $client->send('Octopush - Send SMS like a PRO.');
