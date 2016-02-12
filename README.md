@@ -25,6 +25,26 @@ $client->setSmsSender('Octopush');
 $client->send('Octopush - Send SMS like a PRO.');
 ```
 
+```
+array:9 [
+  "error_code" => "000"
+  "cost" => "0.049"
+  "balance" => "0"
+  "sending_date" => "1455291116"
+  "number_of_sendings" => "1"
+  "currency_code" => "€"
+  "successs" => array:1 [
+    "success" => array:4 [
+      "recipient" => "+381*******"
+      "country_code" => "FR"
+      "cost" => "0.049"
+      "sms_needed" => "1"
+    ]
+  ]
+  "failures" => []
+]
+```
+
 For more information see [documentation](http://www.octopush.com/en/api-sms-doc/sms-sendings).
 
 #### Checking your credit
@@ -35,6 +55,13 @@ For more information see [documentation](http://www.octopush.com/en/api-sms-doc/
 $client = new Octopush\Api\Client('*****@example.com', '***API_KEY***');
 
 $client->getCredit();
+```
+
+```
+array:2 [
+  "error_code" => "000"
+  "credit" => "0.18"
+]
 ```
 
 For more information see [documentation](http://www.octopush.com/en/api-sms-doc/get-credit).
