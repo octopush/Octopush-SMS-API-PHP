@@ -50,7 +50,7 @@ class Client
     private $smsRecipients = [];
 
     /**
-     * @var int unix timestamp
+     * @var DateTime
      */
     private $sendingTime;
 
@@ -98,7 +98,7 @@ class Client
     {
         $this->userLogin = $userLogin;
         $this->apiKey = $apiKey;
-        $this->sendingTime = time();
+        $this->sendingTime = new \DateTime();
     }
 
     public function setSmsType($smsType)
@@ -111,7 +111,7 @@ class Client
         $this->smsRecipients = $smsRecipients;
     }
 
-    public function setSendingTime($sendingTime)
+    public function setSendingTime(\DateTime $sendingTime)
     {
         $this->sendingTime = $sendingTime;
     }
@@ -167,9 +167,8 @@ class Client
             $data['with_replies'] = 1;
         }
 
-        if ($this->sendingTime > time()) {
-            // GMT + 1 (Europe/Paris)
-            $data['sending_time'] = $this->sendingTime;
+        if ($this->sendingTime > (new \DateTime())) {
+            $data['sending_time'] = $this->sendingTime->getTimestamp();
         }
 
         // If needed, key must be computed
