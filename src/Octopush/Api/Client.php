@@ -4,6 +4,7 @@ namespace Octopush\Api;
 
 use Octopush\Api\Exception\RequestException;
 use Octopush\Api\Exception\ResponseException;
+use Octopush\Api\Exception\ResponseCodeException;
 
 /**
  * Octopush API client.
@@ -203,7 +204,16 @@ class Client
 
         curl_close($ch);
 
-        return $this->xml2array($result);
+        $result = $this->xml2array($result);
+
+        if ('000' !== $result['error_code']) {
+            throw new ResponseCodeException(sprintf(
+                'Server returned "%s" error code. See error code list on http://www.octopush.com/en/errors_list.',
+                $result['error_code']
+            ), $result['error_code']);
+        }
+
+        return $result;
     }
 
     private function xml2array($xml)
