@@ -47,23 +47,6 @@ array:9 [
 
 For more information see [documentation](http://www.octopush.com/en/api-sms-doc/sms-sendings).
 
-#### Sending delayed SMS
-
-```php
-<?php
-
-$client = new Octopush\Api\Client('*****@example.com', '***API_KEY***');
-
-$client->setSmsRecipients(['+336********']);
-$client->setSmsSender('AnySender');
-$client->setSmsMode($client::SMS_MODE_DELAYED);
-$client->setSendingTime(new \DateTime('+6 hours'));
-
-$client->send('Octopush - Send SMS like a PRO.');
-```
-
-For more information see [documentation](http://www.octopush.com/en/api-sms-doc/scheduled-sendings).
-
 #### Sending SMS with replies
 
 ```php

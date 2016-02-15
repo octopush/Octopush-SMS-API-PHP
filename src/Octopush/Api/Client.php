@@ -17,9 +17,6 @@ class Client
     const SMS_TYPE_PREMIUM = 'FR';
     const SMS_TYPE_GLOBAL = 'WWW';
 
-    const SMS_MODE_INSTANT = 1;
-    const SMS_MODE_DELAYED = 2;
-
     const REQUEST_MODE_REAL = 'real';
     const REQUEST_MODE_SIMU = 'simu';
 
@@ -60,16 +57,6 @@ class Client
      * @var string
      */
     private $smsSender = 'OneSender';
-
-    /**
-     * Sending profile:
-     *
-     * self::SMS_MODE_INSTANT = Instant sending
-     * self::SMS_MODE_DELAYED = Delayed sending (you must specify the date)
-     *
-     * @var int self::SMS_MODE_*
-     */
-    private $smsMode = self::SMS_MODE_INSTANT;
 
     /**
      * @var bool
@@ -121,11 +108,6 @@ class Client
         $this->smsSender = $smsSender;
     }
 
-    public function setSmsMode($smsMode)
-    {
-        $this->smsMode = $smsMode;
-    }
-
     public function setWithReplies($withReplies = true)
     {
         $this->withReplies = $withReplies;
@@ -159,7 +141,6 @@ class Client
             'sms_recipients' => implode(',', $this->smsRecipients),
             'sms_type' => $this->smsType,
             'sms_sender' => $this->smsSender,
-            'sms_mode' => $this->smsMode,
             'request_mode' => $this->requestMode,
         ];
 
