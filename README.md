@@ -20,7 +20,7 @@ $ composer require octopush/sms-api
 $client = new Octopush\Api\Client('*****@example.com', '***API_KEY***');
 
 $client->setSmsRecipients(['+336********']);
-$client->setSmsSender('Octopush');
+$client->setSmsSender('AnySender');
 
 $client->send('Octopush - Send SMS like a PRO.');
 ```
@@ -55,7 +55,7 @@ For more information see [documentation](http://www.octopush.com/en/api-sms-doc/
 $client = new Octopush\Api\Client('*****@example.com', '***API_KEY***');
 
 $client->setSmsRecipients(['+336********']);
-$client->setSmsSender('Octopush');
+$client->setSmsSender('AnySender');
 $client->setSmsMode($client::SMS_MODE_DELAYED);
 $client->setSendingTime(new \DateTime('+6 hours'));
 
@@ -72,7 +72,7 @@ For more information see [documentation](http://www.octopush.com/en/api-sms-doc/
 $client = new Octopush\Api\Client('*****@example.com', '***API_KEY***');
 
 $client->setSmsRecipients(['+336********']);
-$client->setSmsSender('Octopush');
+$client->setSmsSender('AnySender');
 $client->setWithReplies();
 
 $client->send('Octopush - Send SMS like a PRO.');
