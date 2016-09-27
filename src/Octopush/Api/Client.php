@@ -71,6 +71,13 @@ class Client
     private $requestMode = self::REQUEST_MODE_REAL;
 
     /**
+     * Allows you to choose transactional mode.
+     *
+     * @var bool
+     */
+    private $transactional = false;
+
+    /**
      * Lists the key fields of the application you want to add in the sha1 hash.
      *
      * Example: 'TRYS' (for fields sms_text, sms_recipients, sms_type, sms_sender).
@@ -123,6 +130,11 @@ class Client
         $this->requestKeys = $requestKeys;
     }
 
+    public function setTransactional()
+    {
+        $this->transactional=true;
+    }
+
     /**
      * Sends a simple SMS.
      *
@@ -143,6 +155,10 @@ class Client
             'sms_sender' => $this->smsSender,
             'request_mode' => $this->requestMode,
         ];
+
+        if ($this->transactional) {
+            $data['transactional'] = 1;
+        }
 
         if ($this->withReplies) {
             $data['with_replies'] = 1;
