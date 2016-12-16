@@ -5,6 +5,7 @@ namespace Octopush\Api;
 use Octopush\Api\Exception\RequestException;
 use Octopush\Api\Exception\ResponseException;
 use Octopush\Api\Exception\ResponseCodeException;
+use DateTime;
 
 /**
  * Octopush API client.
@@ -78,6 +79,13 @@ class Client
     private $transactional = false;
 
     /**
+     * Allows you to choose delayed mode to send a message to another date
+     *
+     * @var integer
+     */
+    private $smsMode = 11;
+
+    /**
      * Lists the key fields of the application you want to add in the sha1 hash.
      *
      * Example: 'TRYS' (for fields sms_text, sms_recipients, sms_type, sms_sender).
@@ -135,6 +143,11 @@ class Client
         $this->transactional=true;
     }
 
+    public function setSmsModeToDelayedDate()
+    {
+        $this->smsMode=2;
+    }
+
     /**
      * Sends a simple SMS.
      *
@@ -154,6 +167,7 @@ class Client
             'sms_type' => $this->smsType,
             'sms_sender' => $this->smsSender,
             'request_mode' => $this->requestMode,
+            'sms_mode' => $this->smsMode,
         ];
 
         if ($this->transactional) {
@@ -199,9 +213,10 @@ class Client
         $charToField = [
             'T' => 'sms_text',
             'R' => 'sms_recipients',
+            'M' => 'sms_mode',
             'Y' => 'sms_type',
             'S' => 'sms_sender',
-            'D' => 'sms_date',
+            'D' => 'sending_date',
             'a' => 'recipients_first_names',
             'b' => 'recipients_last_names',
             'c' => 'sms_fields_1',
