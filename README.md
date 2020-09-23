@@ -4,90 +4,110 @@ Octopush SMS API PHP client.
 
 ## Installation
 
-The recommended way to install Octopush SMS API PHP client is through composer:
-
 ```bash
 $ composer require octopush/sms-api
 ```
 
 ## Usage
 
-#### Sending simple SMS
+#### Sending a text SMS Campaign
 
 ```php
 <?php
 
-$client = new Octopush\Api\Client('*****@example.com', '***API_KEY***');
+$client = new Octopush\Client('*****@example.com', '***API-KEY***');
 
-$client->setSmsRecipients(['+336********']);
-$client->setSmsSender('AnySender');
-
-$client->send('Octopush - Send SMS like a PRO.');
-```
-
-```
-array:9 [
-  "error_code" => "000"
-  "cost" => "0.049"
-  "balance" => "0"
-  "sending_date" => "1455291116"
-  "number_of_sendings" => "1"
-  "currency_code" => "€"
-  "successs" => array:1 [
-    "success" => array:4 [
-      "recipient" => "+336*******"
-      "country_code" => "FR"
-      "cost" => "0.049"
-      "sms_needed" => "1"
+$request = new Octopush\Request\SmsCampaign\SendSmsCampaignRequest();
+$request->setPurpose(Octopush\Request\SmsCampaign\SendSmsCampaignRequest::ALERT_TRANSACTIONAL);
+$request->setRecipients([
+    [
+        'phone_number' => '+336********',
+        'param1' => 'Alex',
     ]
-  ]
-  "failures" => []
-]
+]);
+$request->setSender('AnySender');
+$request->setText('Hello, {param1}');
+$request->setType(Octopush\Constant\TypeEnum::SMS_PREMIUM);
+$request->setWithReplies(false);
+$request->setSendAt(new DateTimeImmutable('+1 hour'));
+
+$content = $client->send($request);
 ```
 
-For more information see [documentation](http://www.octopush.com/en/api-sms-doc/sms-sendings).
+```
+Array
+(
+    [sms_ticket] => sms_5f6c4e9fcd599
+    [number_of_contacts] => 1
+    [total_cost] => 0.062
+)
+```
 
-#### Sending SMS with replies
+#### Sending a Vocal SMS Campaign
 
 ```php
 <?php
 
-$client = new Octopush\Api\Client('*****@example.com', '***API_KEY***');
+$client = new Octopush\Client('*****@example.com', '***API-KEY***');
 
-$client->setSmsRecipients(['+336********']);
-$client->setSmsSender('AnySender');
-$client->setWithReplies();
+$request = new Octopush\Request\VocalCampaign\SendVocalCampaignRequest();
+$request->setPurpose(Octopush\Request\SmsCampaign\SendSmsCampaignRequest::ALERT_TRANSACTIONAL);
+$request->setRecipients([
+    [
+        'phone_number' => '+336********',
+    ]
+]);
+$request->setSender('AnySender');
+$request->setText('Hello!');
+$request->setType(Octopush\Constant\TypeEnum::VOCAL_SMS);
+$request->setVoiceGender('female');
+$request->setVoiceLanguage('fr-FR');
+$request->setSendAt(new DateTimeImmutable('+1 hour'));
 
-$client->send('Octopush - Send SMS like a PRO.');
+$content = $client->send($request);
 ```
 
-For more information see [documentation](http://www.octopush.com/en/api-sms-doc/sms-with-replies).
+```
+Array
+(
+    [vocal_ticket] => vocal_5f6c4e4a2afc9
+    [number_of_contacts] => 1
+    [total_cost] => 0.1
+)
+```
 
 #### Checking your credit
 
 ```php
 <?php
 
-$client = new Octopush\Api\Client('*****@example.com', '***API_KEY***');
+$client = new Octopush\Client('*****@example.com', '***API-KEY***');
 
-$client->getCredit();
+$request = new Octopush\Request\GetCreditRequest();
+$request->setProductName(Octopush\Constant\TypeEnum::VOCAL_SMS);
+$request->setCountryCode('FR');
+$request->setWithDetails(true);
+
+$content = $client->send($request);
 ```
 
 ```
-array:2 [
-  "error_code" => "000"
-  "credit" => "0.18"
-]
+Array
+(
+    [amount] => 1074
+    [unit] => vocal_sms
+    [wallet_packs] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 12dda478-fc11-51eb-813c-024417120004
+                    [credit] => 10.144
+                    [expiration_date] => 2030-09-21T15:55:14+02:00
+                )
+        )
+)
 ```
 
-For more information see [documentation](http://www.octopush.com/en/api-sms-doc/get-credit).
+## cURL examples
 
-## Working examples
-
-You can find working examples in `examples` directory.
-
-Before running them, make sure to configure them by editing `config.php` file:
-
-```bash
-$ cp config.php.dist config.php
-```
+You can find cURL examples in `curl-examples` directory.
