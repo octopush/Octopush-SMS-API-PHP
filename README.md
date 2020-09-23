@@ -92,3 +92,7 @@ array:3 [
     "wallet_packs" => "NULL"
 ]
 ```
+
+## cURL examples
+
+You can find cURL examples in `curl-examples` directory.
