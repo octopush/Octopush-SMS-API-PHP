@@ -12,82 +12,87 @@ $ composer require octopush/sms-api
 
 ## Usage
 
-#### Sending simple SMS
+#### Sending a text SMS Campaign
 
 ```php
 <?php
 
-$client = new Octopush\Api\Client('*****@example.com', '***API_KEY***');
+$client = new Octopush\Client('*****@example.com', '***API_KEY***');
 
-$client->setSmsRecipients(['+336********']);
-$client->setSmsSender('AnySender');
-
-$client->send('Octopush - Send SMS like a PRO.');
-```
-
-```
-array:9 [
-  "error_code" => "000"
-  "cost" => "0.049"
-  "balance" => "0"
-  "sending_date" => "1455291116"
-  "number_of_sendings" => "1"
-  "currency_code" => "€"
-  "successs" => array:1 [
-    "success" => array:4 [
-      "recipient" => "+336*******"
-      "country_code" => "FR"
-      "cost" => "0.049"
-      "sms_needed" => "1"
+$request = new Octopush\Request\SmsCampaign\SendSmsCampaignRequest();
+$request->setPurpose(Octopush\Request\SmsCampaign\SendSmsCampaignRequest::ALERT_TRANSACTIONAL);
+$request->setRecipients([
+    [
+        'phone_number' => '+336********',
+        'param1' => 'Alex',
     ]
-  ]
-  "failures" => []
+]);
+$request->setSender('AnySender');
+$request->setText('Hello, {param1}');
+$request->setType(Octopush\Constant\ProductEnum::SMS_PREMIUM_PRODUCT);
+$request->setWithReplies(false);
+$request->setSendAt(new DateTimeImmutable('+1 hour'));
+```
+
+```
+array:3 [
+    "sms_ticket" => "sms_5f69d09739c2e"
+    "number_of_contacts" => "1"
+    "total_cost" => "0.097"
 ]
 ```
 
-For more information see [documentation](http://www.octopush.com/en/api-sms-doc/sms-sendings).
-
-#### Sending SMS with replies
+#### Sending a Vocal SMS Campaign
 
 ```php
 <?php
 
-$client = new Octopush\Api\Client('*****@example.com', '***API_KEY***');
+$client = new Octopush\Client('*****@example.com', '***API_KEY***');
 
-$client->setSmsRecipients(['+336********']);
-$client->setSmsSender('AnySender');
-$client->setWithReplies();
-
-$client->send('Octopush - Send SMS like a PRO.');
+$request = new Octopush\Request\VocalCampaign\SendVocalCampaignRequest();
+$request->setPurpose(Octopush\Request\SmsCampaign\SendSmsCampaignRequest::ALERT_TRANSACTIONAL);
+$request->setRecipients([
+    [
+        'phone_number' => '+336********',
+    ]
+]);
+$request->setSender('AnySender');
+$request->setText('Hello!');
+$request->setType(Octopush\Constant\ProductEnum::VOCAL_SMS_PRODUCT);
+$request->setVoiceGender('female');
+$request->setVoiceLanguage('fr-FR');
+$request->setSendAt(new DateTimeImmutable('+1 hour'));
 ```
 
-For more information see [documentation](http://www.octopush.com/en/api-sms-doc/sms-with-replies).
+```
+array:3 [
+    "vocal_ticket" => "vocal_1f77a09129c2e"
+    "number_of_contacts" => "1"
+    "total_cost" => "0.097"
+]
+```
 
 #### Checking your credit
 
 ```php
 <?php
 
-$client = new Octopush\Api\Client('*****@example.com', '***API_KEY***');
+$client = new Octopush\Client('*****@example.com', '***API_KEY***');
 
-$client->getCredit();
+$request = new Octopush\Request\GetCreditRequest();
+$request->setProductName(Octopush\Constant\ProductEnum::VOCAL_SMS_PRODUCT);
+$request->setCountryCode('FR');
+$request->setWithDetails(false);
 ```
 
 ```
-array:2 [
-  "error_code" => "000"
-  "credit" => "0.18"
+array:3 [
+    "amount" => "216.027"
+    "unit" => "vocal_sms"
+    "wallet_packs" => "NULL"
 ]
 ```
 
-For more information see [documentation](http://www.octopush.com/en/api-sms-doc/get-credit).
+## cURL examples
 
-## Working examples
-
-You can find working examples in `examples` directory.
-
-Before running them, make sure to configure them by editing `config.php` file:
-
-```bash
-$ cp config.php.dist config.php
-```
+You can find cURL examples in `curl-examples` directory.
