@@ -27,7 +27,6 @@ $payload = [
 }
  */
 $jsonEncodedPayload = json_encode($payload);
-print_r($jsonEncodedPayload);
 
 $curl = curl_init();
 
