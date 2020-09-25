@@ -4,8 +4,6 @@ Octopush SMS API PHP client.
 
 ## Installation
 
-The recommended way to install Octopush SMS API PHP client is through composer:
-
 ```bash
 $ composer require octopush/sms-api
 ```
@@ -17,7 +15,7 @@ $ composer require octopush/sms-api
 ```php
 <?php
 
-$client = new Octopush\Client('*****@example.com', '***API_KEY***');
+$client = new Octopush\Client('*****@example.com', '***API-KEY***');
 
 $request = new Octopush\Request\SmsCampaign\SendSmsCampaignRequest();
 $request->setPurpose(Octopush\Request\SmsCampaign\SendSmsCampaignRequest::ALERT_TRANSACTIONAL);
@@ -29,17 +27,20 @@ $request->setRecipients([
 ]);
 $request->setSender('AnySender');
 $request->setText('Hello, {param1}');
-$request->setType(Octopush\Constant\ProductEnum::SMS_PREMIUM_PRODUCT);
+$request->setType(Octopush\Constant\TypeEnum::SMS_PREMIUM);
 $request->setWithReplies(false);
 $request->setSendAt(new DateTimeImmutable('+1 hour'));
+
+$content = $client->send($request);
 ```
 
 ```
-array:3 [
-    "sms_ticket" => "sms_5f69d09739c2e"
-    "number_of_contacts" => "1"
-    "total_cost" => "0.097"
-]
+Array
+(
+    [sms_ticket] => sms_5f6c4e9fcd599
+    [number_of_contacts] => 1
+    [total_cost] => 0.062
+)
 ```
 
 #### Sending a Vocal SMS Campaign
@@ -47,7 +48,7 @@ array:3 [
 ```php
 <?php
 
-$client = new Octopush\Client('*****@example.com', '***API_KEY***');
+$client = new Octopush\Client('*****@example.com', '***API-KEY***');
 
 $request = new Octopush\Request\VocalCampaign\SendVocalCampaignRequest();
 $request->setPurpose(Octopush\Request\SmsCampaign\SendSmsCampaignRequest::ALERT_TRANSACTIONAL);
@@ -58,18 +59,21 @@ $request->setRecipients([
 ]);
 $request->setSender('AnySender');
 $request->setText('Hello!');
-$request->setType(Octopush\Constant\ProductEnum::VOCAL_SMS_PRODUCT);
+$request->setType(Octopush\Constant\TypeEnum::VOCAL_SMS);
 $request->setVoiceGender('female');
 $request->setVoiceLanguage('fr-FR');
 $request->setSendAt(new DateTimeImmutable('+1 hour'));
+
+$content = $client->send($request);
 ```
 
 ```
-array:3 [
-    "vocal_ticket" => "vocal_1f77a09129c2e"
-    "number_of_contacts" => "1"
-    "total_cost" => "0.097"
-]
+Array
+(
+    [vocal_ticket] => vocal_5f6c4e4a2afc9
+    [number_of_contacts] => 1
+    [total_cost] => 0.1
+)
 ```
 
 #### Checking your credit
@@ -77,20 +81,31 @@ array:3 [
 ```php
 <?php
 
-$client = new Octopush\Client('*****@example.com', '***API_KEY***');
+$client = new Octopush\Client('*****@example.com', '***API-KEY***');
 
 $request = new Octopush\Request\GetCreditRequest();
-$request->setProductName(Octopush\Constant\ProductEnum::VOCAL_SMS_PRODUCT);
+$request->setProductName(Octopush\Constant\TypeEnum::VOCAL_SMS);
 $request->setCountryCode('FR');
-$request->setWithDetails(false);
+$request->setWithDetails(true);
+
+$content = $client->send($request);
 ```
 
 ```
-array:3 [
-    "amount" => "216.027"
-    "unit" => "vocal_sms"
-    "wallet_packs" => "NULL"
-]
+Array
+(
+    [amount] => 1074
+    [unit] => vocal_sms
+    [wallet_packs] => Array
+        (
+            [0] => Array
+                (
+                    [id] => 12dda478-fc11-51eb-813c-024417120004
+                    [credit] => 10.144
+                    [expiration_date] => 2030-09-21T15:55:14+02:00
+                )
+        )
+)
 ```
 
 ## cURL examples
