@@ -11,6 +11,4 @@ class TypeEnum
     public const VOCAL_SMS = 'vocal_sms';
     public const HLR = 'hlr';
     public const EURO = 'euro';
-    public const DATABASE_RENTING_B2C = 'database_renting_b2c';
-    public const DATABASE_RENTING_B2B = 'database_renting_b2b';
 }
