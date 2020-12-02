@@ -55,7 +55,7 @@ class SendSmsCampaignRequest extends BaseRequest
                 'type' => $this->type,
                 'purpose' => $this->purpose,
                 'sender' => $this->sender,
-                'with_answers' => $this->withReplies,
+                'with_replies' => $this->withReplies,
                 'send_at' => $this->sendAt->format(DateTime::ATOM),
             ],
         ];
