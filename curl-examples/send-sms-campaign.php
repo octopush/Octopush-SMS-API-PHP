@@ -12,7 +12,7 @@ $payload = [
     'purpose' => 'wholesale',
     'sender' => 'SMS',
     'send_at' => '2020-10-03T07:42:39-07:00',
-    'with_answers' => false,
+    'with_replies' => false,
 ];
 
 /*
@@ -23,7 +23,7 @@ $payload = [
     "purpose":"wholesale",
     "sender":"SMS",
     "send_at":"2020-10-03T07:42:39-07:00",
-    "with_answers":false
+    "with_replies":false
 }
  */
 $jsonEncodedPayload = json_encode($payload);
