@@ -5,7 +5,7 @@ $curl = curl_init();
 curl_setopt_array(
     $curl,
     [
-        CURLOPT_URL => 'https://backend.octopush.com/v1/public/wallet/check-balance?country_code=LU&product_name=sms_low_cost&with_details=1',
+        CURLOPT_URL => 'https://api.octopush.com/v1/public/wallet/check-balance?country_code=LU&product_name=sms_low_cost&with_details=1',
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,
