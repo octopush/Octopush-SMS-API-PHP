@@ -10,7 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class Client
 {
-    const BASE_URI = 'https://backend.octopush.com/v1/public';
+    const BASE_URI = 'https://api.octopush.com/v1/public';
 
     /** @var string */
     private $apiLogin;
