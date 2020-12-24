@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Octopush\Request\SmsCampaign;
 
-use DateTime;
-use DateTimeImmutable;
 use Octopush\Constant\HttpMethodEnum;
 use Octopush\Request\BaseRequest;
 
@@ -34,7 +32,7 @@ class SendSmsCampaignRequest extends BaseRequest
     /** @var bool */
     private $withReplies;
 
-    /** @var DateTimeImmutable */
+    /** @var string */
     private $sendAt;
 
     public function __construct()
@@ -56,7 +54,7 @@ class SendSmsCampaignRequest extends BaseRequest
                 'purpose' => $this->purpose,
                 'sender' => $this->sender,
                 'with_replies' => $this->withReplies,
-                'send_at' => $this->sendAt->format(DateTime::ATOM),
+                'send_at' => $this->sendAt,
             ],
         ];
 
@@ -160,17 +158,17 @@ class SendSmsCampaignRequest extends BaseRequest
     }
 
     /**
-     * @return DateTimeImmutable
+     * @return string
      */
-    public function getSendAt(): DateTimeImmutable
+    public function getSendAt(): string
     {
         return $this->sendAt;
     }
 
     /**
-     * @param DateTimeImmutable $sendAt
+     * @param string $sendAt
      */
-    public function setSendAt(DateTimeImmutable $sendAt): void
+    public function setSendAt(string $sendAt): void
     {
         $this->sendAt = $sendAt;
     }
