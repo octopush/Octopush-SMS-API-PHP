@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Octopush\Request\VocalCampaign;
 
-use DateTime;
-use DateTimeImmutable;
 use Octopush\Constant\HttpMethodEnum;
 use Octopush\Request\BaseRequest;
 
@@ -37,7 +35,7 @@ class SendVocalCampaignRequest extends BaseRequest
     /** @var string */
     private $voiceLanguage;
 
-    /** @var DateTimeImmutable */
+    /** @var string */
     private $sendAt;
 
     public function __construct()
@@ -60,7 +58,7 @@ class SendVocalCampaignRequest extends BaseRequest
                 'sender' => $this->sender,
                 'voice_gender' => $this->voiceGender,
                 'voice_language' => $this->voiceLanguage,
-                'send_at' => $this->sendAt->format(DateTime::ATOM),
+                'send_at' => $this->sendAt,
             ],
         ];
 
@@ -148,18 +146,19 @@ class SendVocalCampaignRequest extends BaseRequest
     }
 
     /**
-     * @return DateTimeImmutable
+     * @return string
      */
-    public function getSendAt(): DateTimeImmutable
+    public function getSendAt(): string
     {
         return $this->sendAt;
     }
 
     /**
-     * @param DateTimeImmutable $sendAt
+     * @param string $sendAt
      */
-    public function setSendAt(DateTimeImmutable $sendAt): void
+    public function setSendAt(string $sendAt): void
     {
+        $date = new \DateTime($sendAt);
         $this->sendAt = $sendAt;
     }
 

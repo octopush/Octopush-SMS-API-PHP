@@ -15,32 +15,45 @@ $ composer require octopush/sms-api
 ```php
 <?php
 
-$client = new Octopush\Client('*****@example.com', '***API-KEY***');
+$client = new Octopush\Client('*****@mail.com', '***API-KEY***');
 
 $request = new Octopush\Request\SmsCampaign\SendSmsCampaignRequest();
-$request->setPurpose(Octopush\Request\SmsCampaign\SendSmsCampaignRequest::ALERT_TRANSACTIONAL);
 $request->setRecipients([
     [
-        'phone_number' => '+336********',
+        'phone_number' => '+33600000000',
         'param1' => 'Alex',
     ]
 ]);
 $request->setSender('AnySender');
-$request->setText('Hello, {param1}');
+$request->setText('Hello {param1}, HAPPY NEW YEAR');
 $request->setType(Octopush\Constant\TypeEnum::SMS_PREMIUM);
+
+// ---------------------------------
+// optional
+// ---------------------------------
+$request->setPurpose(Octopush\Request\SmsCampaign\SendSmsCampaignRequest::ALERT_TRANSACTIONAL);
 $request->setWithReplies(false);
-$request->setSendAt(new DateTimeImmutable('+1 hour'));
+
+$date = new DateTimeImmutable('2021-01-01 00:01:00');
+$isoDateWithTimeZone = $date->format(DATE_ISO8601); // 2021-01-01T00:01:00+0100
+$request->setSendAt($isoDateWithTimeZone); // also works with "2021-01-01 00:01:00", (Central European TimeZone by default)
+// ---------------------------------
 
 $content = $client->send($request);
+
+// ---------------------------------
+// Result example:
+// ---------------------------------
 ```
 
 ```
-Array
-(
-    [sms_ticket] => sms_5f6c4e9fcd599
-    [number_of_contacts] => 1
-    [total_cost] => 0.062
-)
+{
+    "sms_ticket": "sms_5fec89fe97109",
+    "number_of_contacts": 1,
+    "total_cost": 0.0333,
+    "number_of_sms_needed": 1,
+    "residual_credit": 99.5
+}
 ```
 
 #### Sending a Vocal SMS Campaign
@@ -48,32 +61,45 @@ Array
 ```php
 <?php
 
-$client = new Octopush\Client('*****@example.com', '***API-KEY***');
+$client = new Octopush\Client('*****@mail.com', '***API-KEY***');
 
 $request = new Octopush\Request\VocalCampaign\SendVocalCampaignRequest();
-$request->setPurpose(Octopush\Request\SmsCampaign\SendSmsCampaignRequest::ALERT_TRANSACTIONAL);
 $request->setRecipients([
     [
-        'phone_number' => '+336********',
+        'phone_number' => '+33600000000',
     ]
 ]);
 $request->setSender('AnySender');
-$request->setText('Hello!');
+$request->setText('Hello, HAPPY NEW YEAR');
 $request->setType(Octopush\Constant\TypeEnum::VOCAL_SMS);
 $request->setVoiceGender('female');
 $request->setVoiceLanguage('fr-FR');
-$request->setSendAt(new DateTimeImmutable('+1 hour'));
+
+// ---------------------------------
+// optional
+// ---------------------------------
+$request->setPurpose(Octopush\Request\VocalCampaign\SendVocalCampaignRequest::ALERT_TRANSACTIONAL);
+
+$date = new DateTimeImmutable('2021-01-01 00:01:00');
+$isoDateWithTimeZone = $date->format(DATE_ISO8601); // 2021-01-01T00:01:00+0100
+$request->setSendAt($isoDateWithTimeZone); // also works with "2021-01-01 00:01:00", (Central European TimeZone by default)
+// ---------------------------------
 
 $content = $client->send($request);
+
+// ---------------------------------
+// Result example:
+// ---------------------------------
 ```
 
 ```
-Array
-(
-    [vocal_ticket] => vocal_5f6c4e4a2afc9
-    [number_of_contacts] => 1
-    [total_cost] => 0.1
-)
+{
+    "vocal_ticket": "vocal_5fed928fda524",
+    "number_of_contacts": 1,
+    "total_cost": 0.03,
+    "residual_credit": 99.5,
+    "estimated_duration": 30
+}
 ```
 
 #### Checking your credit
@@ -89,23 +115,24 @@ $request->setCountryCode('FR');
 $request->setWithDetails(true);
 
 $content = $client->send($request);
+
+// ---------------------------------
+// Result example:
+// ---------------------------------
 ```
 
 ```
-Array
-(
-    [amount] => 1074
-    [unit] => vocal_sms
-    [wallet_packs] => Array
-        (
-            [0] => Array
-                (
-                    [id] => 12dda478-fc11-51eb-813c-024417120004
-                    [credit] => 10.144
-                    [expiration_date] => 2030-09-21T15:55:14+02:00
-                )
-        )
-)
+{
+    "amount": 10,
+    "unit": "vocal_sms",
+    "wallet_packs": [
+        {
+            "id": "1d234c18-396c-12eb-b80e-02455c12550a",
+            "credit": 10,
+            "expiration_date": "2030-12-08T16:45:14+01:00"
+        }
+    ]
+}
 ```
 
 ## cURL examples
