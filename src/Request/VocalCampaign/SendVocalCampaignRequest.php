@@ -59,6 +59,7 @@ class SendVocalCampaignRequest extends BaseRequest
                 'voice_gender' => $this->voiceGender,
                 'voice_language' => $this->voiceLanguage,
                 'send_at' => $this->sendAt,
+                'simulation_mode' => $this->simulationMode,
             ],
         ];
 
