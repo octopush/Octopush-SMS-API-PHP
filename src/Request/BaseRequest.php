@@ -12,7 +12,7 @@ abstract class BaseRequest
     /** @var string */
     protected $method;
     
-    protected bool $simulation_mode;
+    protected bool $simulationMode;
 
     /**
      * @return string
@@ -32,7 +32,7 @@ abstract class BaseRequest
     
     public function setSimulationMode(bool $mode): void
     {
-        $this->simulation_mode = $mode;
+        $this->simulationMode = $mode;
     }   
 
     abstract public function getQueryArray(): array;
