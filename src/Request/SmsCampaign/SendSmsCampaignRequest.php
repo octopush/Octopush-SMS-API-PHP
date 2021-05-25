@@ -55,6 +55,7 @@ class SendSmsCampaignRequest extends BaseRequest
                 'sender' => $this->sender,
                 'with_replies' => $this->withReplies,
                 'send_at' => $this->sendAt,
+                'simulation_mode' => $this->simulationMode
             ],
         ];
 
