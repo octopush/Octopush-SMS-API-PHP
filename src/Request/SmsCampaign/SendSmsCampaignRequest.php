@@ -35,6 +35,9 @@ class SendSmsCampaignRequest extends BaseRequest
     /** @var string */
     private $sendAt;
 
+    /** @var bool */
+    private $simulationMode;
+
     public function __construct()
     {
         $this->method = HttpMethodEnum::POST;
@@ -172,5 +175,21 @@ class SendSmsCampaignRequest extends BaseRequest
     public function setSendAt(string $sendAt): void
     {
         $this->sendAt = $sendAt;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getSimulationMode(): bool
+    {
+        return $this->simulationMode;
+    }
+
+    /**
+     * @param bool $simulationMode
+     */
+    public function setSimulationMode(bool $simulationMode): void
+    {
+        $this->simulationMode = $simulationMode;
     }
 }
