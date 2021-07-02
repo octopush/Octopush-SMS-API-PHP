@@ -13,7 +13,7 @@ abstract class BaseRequest
     protected $method;
     
     /** @var bool */
-    protected bool $simulationMode;
+    protected $simulationMode;
 
     /**
      * @return string
