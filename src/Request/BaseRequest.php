@@ -30,11 +30,6 @@ abstract class BaseRequest
     {
         return $this->uri;
     }
-    
-    public function setSimulationMode(bool $mode): void
-    {
-        $this->simulationMode = $mode;
-    }   
 
     abstract public function getQueryArray(): array;
 
