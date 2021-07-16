@@ -11,9 +11,6 @@ abstract class BaseRequest
 
     /** @var string */
     protected $method;
-    
-    /** @var bool */
-    protected $simulationMode;
 
     /**
      * @return string
