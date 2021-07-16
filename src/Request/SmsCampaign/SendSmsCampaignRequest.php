@@ -34,6 +34,9 @@ class SendSmsCampaignRequest extends BaseRequest
 
     /** @var string */
     private $sendAt;
+    
+    /** @var bool */
+    private $simulationMode;
 
     public function __construct()
     {
@@ -173,4 +176,21 @@ class SendSmsCampaignRequest extends BaseRequest
     {
         $this->sendAt = $sendAt;
     }
+    
+    /**
+     * @return bool
+     */
+    public function getSimulationMode(): bool
+    {
+        return $this->simulationMode;
+    }
+
+    /**
+     * @param bool $simulationMode
+     */
+    public function setSimulationMode(bool $simulationMode): void
+    {
+        $this->simulationMode = $simulationMode;
+    }
+    
 }
