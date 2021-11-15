@@ -12,6 +12,6 @@
         "php": ">=7.1",
         "ext-curl": "*",
         "ext-json": "*",
-        "guzzlehttp/guzzle": "^6.2"
+        "guzzlehttp/guzzle": "^6.2|^7.0"
     }
 }
