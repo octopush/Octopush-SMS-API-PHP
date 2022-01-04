@@ -60,6 +60,7 @@ class SendSmsCampaignRequest extends BaseRequest
                 'send_at' => $this->sendAt,
                 'simulation_mode' => $this->simulationMode
             ],
+            'http_errors' => false
         ];
 
         return $this->filterQueryString($parameters);
