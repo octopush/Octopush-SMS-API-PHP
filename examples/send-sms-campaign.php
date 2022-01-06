@@ -28,6 +28,12 @@ $request->setSendAt($isoDateWithTimeZone); // also works with "2021-01-01 00:01:
 
 $content = $client->send($request);
 
+if (!array_key_exists('code', $content)) {
+    echo 'Success';
+} else {
+    echo 'Failure.';
+}
+
 // ---------------------------------
 // Result example:
 // ---------------------------------
